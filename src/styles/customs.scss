@@ -89,4 +89,9 @@ header {
 
 .user-pannel {
     display: flex;
+    .avatar {
+        img{
+            border-radius: 100px;
+        }
+    }
 }

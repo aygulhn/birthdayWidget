@@ -14,7 +14,7 @@ export class BirthdayStore {
         try {
             const response = await getBirthdays(data)
             runInAction(() => {
-                this.birthdayList = response;
+                this.birthdayList = response.data;
             });
         } catch (error) {
             runInAction(() => {

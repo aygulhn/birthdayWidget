@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { data } from './data'
 import UserPannel from '../containers/UserPannel'
-import { periodsKey } from 'util/keys'
 
 class Widget extends Component {
 
@@ -39,6 +37,8 @@ class Widget extends Component {
 
     render() {
 
+        // console.log(this.props.list)
+
         return (
             <article className="widget">
                 <h1>Birthdays</h1>
@@ -52,9 +52,9 @@ class Widget extends Component {
                         </button>
                     )}
                 </section>
-                {true ?
+                {this.props.list?.users?.length ?
                     <section className="data">
-                        {data.users.map(user =>
+                        {this.props.list.users.map(user =>
                             <UserPannel
                                 user={user}
                             />

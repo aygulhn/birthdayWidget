@@ -1,5 +1,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react';
+import { toJS } from 'mobx';
 
 import Header from './Header'
 import Widget from 'components/Widget'
@@ -62,7 +63,7 @@ class BirthdayWidget extends React.Component {
 
     render() {
 
-        const { birthdayList } = this.props.birthdayStore
+        const birthdayList = toJS(this.props.birthdayStore.birthdayList)
 
         return (
             <>
