@@ -1,5 +1,7 @@
 import { observable, runInAction, action, makeAutoObservable } from 'mobx';
 import { getBirthdays } from 'services'
+import { sortByName, sortByDateASC, sortByDateDSC } from 'util/sortHelper'
+import { periodsKey } from 'util/keys'
 
 export class BirthdayStore {
 
@@ -9,18 +11,26 @@ export class BirthdayStore {
 
     @observable birthdayList = [];
 
+    @action getBirthdayList = async (data, period) => {
 
-    @action getBirthdayList = async (data) => {
         try {
             const response = await getBirthdays(data)
             runInAction(() => {
-                this.birthdayList = response.data;
+                if (period === periodsKey.today) {
+                    this.birthdayList = sortByName(response.data.users);
+                }
+                else if (period === periodsKey.past) {
+                    this.birthdayList = sortByDateDSC(response.data.users);
+                }
+                else if (period === periodsKey.upcoming) {
+                    this.birthdayList = sortByDateASC(response.data.users);
+                }
             });
+
         } catch (error) {
             runInAction(() => {
                 this.birthdayList = [];
             });
         }
-    };
-
+    }
 }

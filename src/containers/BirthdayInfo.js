@@ -2,16 +2,16 @@ import React from 'react'
 import { parseDateToTxt } from 'util/dateHelper'
 import { URL_API } from 'constants/config'
 
-const UserPannel = ({ user }) => {
+const BirthdayInfo = ({ user }) => {
 
     return (
-        <div className="user-pannel">
+        <div className="birthday-info">
             <div className="avatar">
                 <img src={`${URL_API}${user.avatarUrl}`} alt="avatar" />
             </div>
             <div className="info">
-                <p>{user.name}</p>
-                <p className="light-clr">{user.jobTitle}</p>
+                <p className="name">{user.name}</p>
+                <p className="job light-clr">{user.jobTitle}</p>
                 <p className="bold-txt">{parseDateToTxt(user.birthday)}</p>
             </div>
 
@@ -19,4 +19,4 @@ const UserPannel = ({ user }) => {
     )
 }
 
-export default UserPannel;
+export default BirthdayInfo;

@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
-import UserPannel from '../containers/UserPannel'
+import BirthdayInfo from '../containers/BirthdayInfo'
+import {periodsKey} from 'util/keys'
 
 class Widget extends Component {
 
     state = {
         periods: [
-            'Past dates',
-            'Today',
-            'Upcoming dates',
+            periodsKey.past,
+            periodsKey.today,
+            periodsKey.upcoming,
         ],
-        selectedPeriod: 'Today'
+        selectedPeriod: periodsKey.today,
     }
 
 
@@ -26,18 +27,12 @@ class Widget extends Component {
         this.setState({
             selectedPeriod: period
         },
-            () => this.loadBithdayList()
+            () => this.props.loadList(this.state.selectedPeriod)
         )
-    }
-
-    loadBithdayList = () => {
-        this.props.loadList(this.state.selectedPeriod)
     }
 
 
     render() {
-
-        // console.log(this.props.list)
 
         return (
             <article className="widget">
@@ -52,10 +47,11 @@ class Widget extends Component {
                         </button>
                     )}
                 </section>
-                {this.props.list?.users?.length ?
+                {this.props.list?.length ?
                     <section className="data">
-                        {this.props.list.users.map(user =>
-                            <UserPannel
+                        {this.props.list.map(user =>
+                            <BirthdayInfo
+                                key={user.id}
                                 user={user}
                             />
                         )}
@@ -63,18 +59,20 @@ class Widget extends Component {
                     :
                     <p className="dark-clr text-center">Unfortunately there is no users with birthdays on these dates</p>
                 }
-                <section className="button-pannel">
-                    <button className="empty-btn text-center"
-                        onClick={this.loadBithdayList}
-                    >
-                        Show more
+                {(this.props.pageCount !== this.props.pageNo) &&
+                    <section className="button-pannel">
+                        <button className="empty-btn text-center"
+                            onClick={this.props.handleLoadMore}
+                        >
+                            Show more
                     <img src={require('../assets/images/icons/chevron-right.svg').default} alt="next" />
-                    </button>
-                </section>
+                        </button>
+                    </section>
+
+                }
             </article>
         )
     }
-
 }
 
 export default Widget

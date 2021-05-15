@@ -5,6 +5,7 @@ import { toJS } from 'mobx';
 import Header from './Header'
 import Widget from 'components/Widget'
 import { сutYear, isLeapYear } from 'util/dateHelper';
+import { periodsKey } from 'util/keys'
 
 @inject('birthdayStore')
 @observer
@@ -12,7 +13,9 @@ class BirthdayWidget extends React.Component {
 
     state = {
         dateFrom: null,
-        dateTo: null
+        dateTo: null,
+        currentPageNo: 1,
+        pageCount: null
     }
 
     constructor(props) {
@@ -30,34 +33,42 @@ class BirthdayWidget extends React.Component {
 
 
     componentDidMount() {
-        this.props.birthdayStore.getBirthdayList(this.state)
+        this.getBirthdayList(periodsKey.today)
     }
 
-    loadBirthdayList = (period) => {
+    loadBirthdayByPeriod = (period) => {
         const currentDate = new Date();
         let newDateFrom, newDateTo;
 
-        if (period === 'Past dates') {
+        if (period === periodsKey.past) {
             newDateFrom = new Date().setDate(currentDate.getDate() - 14);
             newDateTo = new Date().setDate(currentDate.getDate() - 1);
 
-        } else if (period === 'Upcoming dates') {
+        } else if (period === periodsKey.upcoming) {
             newDateFrom = new Date().setDate(currentDate.getDate() + 1);
             newDateTo = new Date().setDate(currentDate.getDate() + 14);
-        } else if (period === 'Today') {
+        } else if (period === periodsKey.today) {
             newDateFrom = newDateTo = currentDate;
         }
 
         this.setState({
             dateFrom: сutYear(newDateFrom),
-            dateTo: сutYear(newDateTo)
-        }, () => this.props.birthdayStore.getBirthdayList(this.state))
-
+            dateTo: сutYear(newDateTo),
+            currentPageNo: 1
+        }, () => this.getBirthdayList(period))
     }
 
 
-    getBirthdayList = () => {
+    getBirthdayList = (period) => {
+        const { dateFrom, dateTo } = this.state
+        this.props.birthdayStore.getBirthdayList({ dateFrom, dateTo }, period)
+    }
 
+
+    changePageNo = () => {
+        this.setState((state) => ({
+            currentPageNo: state.currentPageNo + 1
+        }))
     }
 
 
@@ -69,8 +80,11 @@ class BirthdayWidget extends React.Component {
             <>
                 <Header />
                 <Widget
-                    loadList={this.loadBirthdayList}
-                    list={birthdayList}
+                    loadList={this.loadBirthdayByPeriod}
+                    handleLoadMore={this.changePageNo}
+                    list={birthdayList?.slice((10 * (this.state.currentPageNo - 1)), 10 * (this.state.currentPageNo))}
+                    pageCount={Math.ceil(birthdayList?.length / 10)}
+                    pageNo={this.state.currentPageNo}
                 />
             </>
         )
