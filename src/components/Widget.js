@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import BirthdayInfo from '../containers/BirthdayInfo'
-import {periodsKey} from 'util/keys'
+import { periodsKey } from 'util/keys'
 
 class Widget extends Component {
 
@@ -48,27 +48,28 @@ class Widget extends Component {
                     )}
                 </section>
                 {this.props.list?.length ?
-                    <section className="data">
-                        {this.props.list.map(user =>
-                            <BirthdayInfo
-                                key={user.id}
-                                user={user}
-                            />
-                        )}
-                    </section>
+                    <>
+                        <section className="data">
+                            {this.props.list.map(user =>
+                                <BirthdayInfo
+                                    key={user.id}
+                                    user={user}
+                                />
+                            )}
+                        </section>
+                        {(this.props.pageCount !== this.props.pageNo) &&
+                            <section className="button-pannel">
+                                <button className="empty-btn text-center"
+                                    onClick={this.props.handleLoadMore}
+                                >
+                                    Show more
+                                        <img src={require('../assets/images/icons/chevron-right.svg').default} alt="next" />
+                                </button>
+                            </section>
+                        }
+                    </>
                     :
                     <p className="dark-clr text-center">Unfortunately there is no users with birthdays on these dates</p>
-                }
-                {(this.props.pageCount !== this.props.pageNo) &&
-                    <section className="button-pannel">
-                        <button className="empty-btn text-center"
-                            onClick={this.props.handleLoadMore}
-                        >
-                            Show more
-                    <img src={require('../assets/images/icons/chevron-right.svg').default} alt="next" />
-                        </button>
-                    </section>
-
                 }
             </article>
         )

@@ -4,6 +4,7 @@ import { toJS } from 'mobx';
 
 import Header from './Header'
 import Widget from 'components/Widget'
+import Loader from 'components/Loader'
 import { сutYear, isLeapYear } from 'util/dateHelper';
 import { periodsKey } from 'util/keys'
 
@@ -75,14 +76,18 @@ class BirthdayWidget extends React.Component {
     render() {
 
         const birthdayList = toJS(this.props.birthdayStore.birthdayList)
+        const loader = toJS(this.props.birthdayStore.loader)
 
         return (
             <>
+                {loader &&
+                    <Loader />
+                }
                 <Header />
                 <Widget
                     loadList={this.loadBirthdayByPeriod}
                     handleLoadMore={this.changePageNo}
-                    list={birthdayList?.slice((10 * (this.state.currentPageNo - 1)), 10 * (this.state.currentPageNo))}
+                    list={birthdayList?.slice(0, 10 * this.state.currentPageNo)}
                     pageCount={Math.ceil(birthdayList?.length / 10)}
                     pageNo={this.state.currentPageNo}
                 />

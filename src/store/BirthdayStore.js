@@ -9,11 +9,15 @@ export class BirthdayStore {
         makeAutoObservable(this)
     }
 
-    @observable birthdayList = [];
+    @observable birthdayList = null;
+    @observable loader = false
 
     @action getBirthdayList = async (data, period) => {
 
         try {
+            runInAction(() => {
+                this.loader = true
+            })
             const response = await getBirthdays(data)
             runInAction(() => {
                 if (period === periodsKey.today) {
@@ -26,10 +30,12 @@ export class BirthdayStore {
                     this.birthdayList = sortByDateASC(response.data.users);
                 }
             });
+            this.loader = false
 
         } catch (error) {
             runInAction(() => {
-                this.birthdayList = [];
+                this.loader = false
+                this.birthdayList = null;
             });
         }
     }
