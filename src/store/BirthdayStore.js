@@ -9,7 +9,7 @@ export class BirthdayStore {
         makeAutoObservable(this)
     }
 
-    @observable birthdayList = null;
+    @observable birthdayList = [];
     @observable loader = false
 
     @action getBirthdayList = async (data, period) => {
@@ -35,7 +35,7 @@ export class BirthdayStore {
         } catch (error) {
             runInAction(() => {
                 this.loader = false
-                this.birthdayList = null;
+                this.birthdayList = [];
             });
         }
     }

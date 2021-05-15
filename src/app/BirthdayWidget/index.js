@@ -87,8 +87,8 @@ class BirthdayWidget extends React.Component {
                 <Widget
                     loadList={this.loadBirthdayByPeriod}
                     handleLoadMore={this.changePageNo}
-                    list={birthdayList?.slice(0, 10 * this.state.currentPageNo)}
-                    pageCount={Math.ceil(birthdayList?.length / 10)}
+                    list={birthdayList.length ? birthdayList.slice(0, 10 * this.state.currentPageNo) : []}
+                    pageCount={birthdayList.length ? Math.ceil(birthdayList.length / 10) : 1}
                     pageNo={this.state.currentPageNo}
                 />
             </>

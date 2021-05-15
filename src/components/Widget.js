@@ -47,7 +47,7 @@ class Widget extends Component {
                         </button>
                     )}
                 </section>
-                {this.props.list?.length ?
+                {this.props.list.length ?
                     <>
                         <section className="data">
                             {this.props.list.map(user =>
